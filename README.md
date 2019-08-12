@@ -44,6 +44,8 @@ See complete Ubuntu, Windows, and macOS templates in the [examples folder](https
 * `password`(string) - vSphere password.
 * `insecure_connection`(boolean) - Do not validate vCenter server's TLS certificate. Defaults to `false`.
 * `datacenter`(string) - VMware datacenter name. Required if there is more than one datacenter in vCenter.
+* `persist`(boolean) - Load existing govmomi session from disk. Also save to disk.
+* `vimsessionpath`(string) - The directory where govmomi session is loaded from and saved to. Default: ${HOME}/.govmomi/sessions
 
 ### VM Location
 
