@@ -3,6 +3,7 @@ package common
 import (
 	"context"
 	"fmt"
+
 	"github.com/hashicorp/packer/helper/multistep"
 	"github.com/jetbrains-infra/packer-builder-vsphere/driver"
 )
@@ -13,6 +14,7 @@ type ConnectConfig struct {
 	Password           string `mapstructure:"password"`
 	InsecureConnection bool   `mapstructure:"insecure_connection"`
 	Datacenter         string `mapstructure:"datacenter"`
+	Persist            bool   `mapstructure:"persist"`
 }
 
 func (c *ConnectConfig) Prepare() []error {
@@ -42,6 +44,7 @@ func (s *StepConnect) Run(_ context.Context, state multistep.StateBag) multistep
 		Password:           s.Config.Password,
 		InsecureConnection: s.Config.InsecureConnection,
 		Datacenter:         s.Config.Datacenter,
+		Persist:            s.Config.Persist,
 	})
 	if err != nil {
 		state.Put("error", err)
