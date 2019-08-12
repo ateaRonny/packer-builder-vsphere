@@ -283,26 +283,30 @@ func NewDriver(config *ConnectConfig) (*Driver, error) {
 	credentials := url.UserPassword(config.Username, config.Password)
 	vcenterUrl.User = credentials
 
-	//TODO: Create logic to set vim session path only if missing from config file
-	userHomeDir, err := homedir.Dir()
-	if err != nil {
-		return nil, err
+	//Set default vim session path only if not set in config file
+	if config.Persist == true && len(config.VimSessionPath) == 0 {
+		userHomeDir, err := homedir.Dir()
+		if err != nil {
+			return nil, err
+		}
+		config.VimSessionPath = filepath.Join(userHomeDir, ".govmomi", "sessions")
 	}
 
-	config.VimSessionPath = filepath.Join(userHomeDir, ".govmomi", "sessions")
-
+	// Create new govmomi client session
 	client := new(govmomi.Client)
 	client, err = config.SavedVimSessionOrNew(vcenterUrl)
 	if err != nil {
 		return nil, err
 	}
 
+	// Save govmomi session if persist flag is set
 	if config.Persist == true {
 		err = config.SaveVimClient(client)
 		if err != nil {
 			return nil, err
 		}
 	}
+
 	finder := find.NewFinder(client.Client, false)
 	datacenter, err := finder.DatacenterOrDefault(ctx, config.Datacenter)
 	if err != nil {
