@@ -15,6 +15,7 @@ type ConnectConfig struct {
 	InsecureConnection bool   `mapstructure:"insecure_connection"`
 	Datacenter         string `mapstructure:"datacenter"`
 	Persist            bool   `mapstructure:"persist"`
+	VimSessionPath     string `mapstructure:"vimsessionpath"`
 }
 
 func (c *ConnectConfig) Prepare() []error {
@@ -45,6 +46,7 @@ func (s *StepConnect) Run(_ context.Context, state multistep.StateBag) multistep
 		InsecureConnection: s.Config.InsecureConnection,
 		Datacenter:         s.Config.Datacenter,
 		Persist:            s.Config.Persist,
+		VimSessionPath:     s.Config.VimSessionPath,
 	})
 	if err != nil {
 		state.Put("error", err)
